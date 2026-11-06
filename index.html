@@ -849,9 +849,9 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
       fixes: [[5, "① Subsidy upfront, as credits"], [4, "② Approval deadline"], [2, "③ Models as a service"], [8, "④ Deliver first, then sell abroad"]],
       src: "Esya Centre blog" },
 
-    { kicker: "Explore", side: "both", cam: "all", last: true,
-      h: "Every block and every rupee we found, with sources.",
-      p: "Not a full count: only published figures are drawn, and each flow says what its number covers." }
+    { kicker: "Explore", side: "both", cam: "all", last: true, allFlows: true,
+      h: "Every rupee we could trace, with sources.",
+      p: "Each tube is one money flow; thicker means more money. Not a full count: only published figures are drawn, and each flow says what its number covers." }
   ];
 })();
 
@@ -872,7 +872,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   const chip = i => { const p = P[i]; return `<button class="chip r-${p.r}${p.logo && p.logo.length > 1 ? " duo" : ""}${p.logo ? "" : " mono"}" data-i="${i}" aria-label="${esc(p.n)}" title="${esc(p.n)}">${p.logo ? p.logo.map(k => `<img src="${S.LOGOS[k]}" alt="">`).join("") : esc(p.mono)}</button>`; };
   const note = (z, n) => (S.NOTES.find(x => x.z === z && x.n === n) || {}).t;
   // side: which tower is shown (and whose money); money: off, every flow, or totals by layer.
-  const state = { side: "iai", money: "off", sel: null, role: null, focus: null, fg: "all", flow: null, kind: "moved", aggLayer: null };
+  const state = { side: "both", money: "flows", sel: null, role: null, focus: null, fg: "all", flow: null, kind: "moved", aggLayer: null };
   const panel = document.getElementById("panel"), pop = document.getElementById("pop"), side = document.querySelector(".side");
   const layerSel = document.getElementById("layerSel");
   layerSel.insertAdjacentHTML("beforeend", S.LAYERS.map((l, k) => `<option value="${k + 1}">${k + 1} · ${l}</option>`).join(""));
@@ -1172,6 +1172,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   }
   function exitStory() {
     fig.classList.remove("storymode"); storyEl.hidden = true; state.story = null;
+    state.side = "both"; state.money = "flows"; state.fg = "all";
     window.Stack3D?.story(null);
     showHome();
     stageEl.scrollIntoView({ block: "start" });
@@ -1806,7 +1807,7 @@ window.Stack3D = {
     const st = storyStep = S.STORY[i];
     controls.enabled = false; sel = focus = selFlow = aggLayer = hover = role = null; moneyOn = aggOn = false;
     side = st.side || "both"; placeLayerLabels();
-    const tubes = (st.tubes || []).filter(([k]) => k >= 0 && flows.some(fl => fl.k === k));
+    const tubes = (st.allFlows ? S.FLOWS.map((f, k) => [k, ""]).filter(([k]) => !S.FLOWS[k].st && S.FLOWS[k].g !== "suppliers") : st.tubes || []).filter(([k]) => k >= 0 && flows.some(fl => fl.k === k));
     const ix = n => PIX[n];
     story = { fl: new Set(tubes.map(([k]) => S.FLOWS[k])), lit: new Set((st.lit || []).map(ix)), mark: new Set((st.mark || []).map(ix)), caps: new Set((st.caps || []).map(ix)), layers: new Set(st.layers || []), tags: new Set() };
     tubes.forEach(([k, t]) => { endsOf(S.FLOWS[k]).forEach(x => story.lit.add(x)); if (!t) return; const l = tubeLabel(k); l.el.firstChild.textContent = t; story.tags.add(l); });
