@@ -270,6 +270,50 @@ details.sources ol { margin: 10px 0 0; padding-left: 1.4rem; display: grid; gap:
 @media (max-width: 640px) { details.sources ol { columns: 1; } }
 details.sources li { break-inside: avoid; }
 .fig figcaption { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+/* ---------- story mode: cards scroll past a fixed stage ---------- */
+.sbar, .story { display: none; }
+.storymode .layout { grid-template-columns: minmax(0, 1fr); }
+.storymode .side, .storymode .hint, .storymode .touchhint, .storymode .peek { display: none !important; }
+.storymode .stage { position: sticky; top: 0; height: 100vh; height: 100dvh; min-height: 0; touch-action: auto; }
+.storymode .stage canvas, .storymode .stage .labels, .storymode .stage .labels * { pointer-events: none !important; }
+.storymode .sbar { display: flex; position: absolute; top: 12px; right: 12px; z-index: 6; gap: 12px; align-items: center; }
+.sdots { display: flex; gap: 6px; }
+.sdots button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1px solid var(--muted); background: transparent; cursor: pointer; }
+.sdots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
+.sskip .slim { display: none; } .sskip { white-space: nowrap; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 88%, transparent); border-radius: 999px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; }
+.storymode .story { display: block; position: relative; z-index: 5; margin-top: -100vh; margin-top: -100dvh; pointer-events: none; }
+.sstep { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; padding: 56px 24px; }
+.scard { pointer-events: auto; width: min(400px, 100%); background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; box-shadow: 0 10px 30px rgb(0 0 0 / 0.25); }
+.skick { font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.scard h2 { margin: 6px 0 10px; font-family: var(--f-display); font-stretch: 82%; font-weight: 800; font-size: 1.45rem; line-height: 1.12; text-wrap: balance; }
+.scard p { margin: 8px 0 0; font-size: 0.95rem; line-height: 1.45; }
+.sstats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 6px 0; }
+.sstats b { display: block; font-family: var(--f-display); font-stretch: 80%; font-weight: 800; font-size: 1.6rem; line-height: 1.05; color: var(--accent); }
+.sstats span { display: block; font-size: 0.78rem; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+.sbars { display: grid; gap: 8px; margin: 6px 0; }
+.sb { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "l v" "b b"; gap: 2px 10px; font-size: 0.8rem; }
+.sb span { grid-area: l; color: var(--muted); } .sb b { grid-area: v; font-family: var(--f-mono); }
+.sb i { grid-area: b; display: block; height: 8px; background: var(--soft); border-radius: 4px; overflow: hidden; }
+.sb em { display: block; height: 100%; min-width: 3px; background: var(--accent); border-radius: 4px; }
+.scard .snote { font-size: 0.8rem; color: var(--muted); }
+.sfix { margin: 8px 0 0; padding-left: 1.3em; font-size: 0.92rem; line-height: 1.4; } .sfix li { margin: 5px 0; }
+.scard .ssrc { font-size: 0.72rem; color: var(--muted); margin-top: 12px; }
+.scard .sscroll { font-family: var(--f-mono); font-size: 0.75rem; color: var(--accent); }
+.sgo { margin-top: 12px; border: 0; border-radius: 6px; padding: 9px 16px; background: var(--accent); color: var(--bg); font-weight: 700; cursor: pointer; }
+.replay { border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 6px; padding: 6px 10px; font-weight: 600; cursor: pointer; justify-self: start; }
+.lbl-st > span, .lbl-fix > span { display: block; white-space: nowrap; font-family: var(--f-display); font-stretch: 82%; font-weight: 700; font-size: 13px; padding: 3px 8px; border-radius: 5px; background: color-mix(in srgb, var(--paper) 90%, transparent); border: 1px solid var(--line); color: var(--ink); }
+.lbl-st > span { transform: translateY(-60%); }
+.lbl-fix > span { color: var(--accent); border-color: var(--accent); box-shadow: 0 2px 8px rgb(0 0 0 / 0.3); }
+@media (max-width: 640px) {
+  .sstep { align-items: flex-end; padding: 0 8px 14px; }
+  .scard { width: 100%; padding: 14px 15px; }
+  .scard h2 { font-size: 1.2rem; }
+  .sstats b { font-size: 1.3rem; }
+  .storymode .sbar { top: 8px; left: 8px; right: 8px; justify-content: space-between; }
+  .sskip .wide { display: none; } .sskip .slim { display: inline; } .sdots { gap: 5px; } .sdots button { width: 9px; height: 9px; }
+  .lbl-st > span { display: none; }
+  .lbl-fix > span { font-size: 10.5px; white-space: normal; max-width: 140px; text-align: center; }
+}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -279,8 +323,7 @@ details.sources li { break-inside: avoid; }
 <div class="wrap">
   <figure class="fig">
     <div class="head">
-      <h1>India's AI stack</h1>
-      <p class="deck">IndiaAI's GPU pool and the market around it, layer by layer. The cloud firms that rent GPUs to the mission sell the same capacity to everyone else.</p>
+      <h1>India's idle GPUs: a scheme problem, not a demand problem</h1>
     </div>
     <div class="layout">
       <div class="stagecol">
@@ -291,12 +334,15 @@ details.sources li { break-inside: avoid; }
           <span class="touchhint" id="touchhint">One finger turns · pinch to zoom · tap a block</span>
           <div class="tip" id="tip" hidden></div>
           <button class="peek" id="peek" type="button"></button>
+          <div class="sbar"><div class="sdots" id="sdots" aria-label="Story steps"></div><button class="sskip" id="sskip" type="button"><span class="wide">Skip to the explorer</span><span class="slim">Skip</span> →</button></div>
         </div>
         <div class="list" id="list" hidden></div>
+        <div class="story" id="story" hidden></div>
       </div>
       <aside class="side" aria-label="Controls and details">
         <div class="panel pop" id="pop" hidden role="dialog" aria-label="Money flow details" tabindex="-1"></div>
         <div class="ctl main">
+          <button class="replay" id="replay" type="button">▶ Play the story</button>
           <div class="cg"><span class="lt">Show</span>
             <div class="seg full" id="sideSeg" role="group" aria-label="Which side"><button type="button" data-s="iai">IndiaAI Mission</button><button type="button" data-s="mkt">Open market</button><button type="button" data-s="both">Both</button></div></div>
           <div class="cg"><span class="lt">Money flows</span>
@@ -308,7 +354,7 @@ details.sources li { break-inside: avoid; }
             <select id="layerSel" class="sel"><option value="">All layers</option></select></div>
           <div class="cg legend"><span class="lt">Highlight a type</span>
             <div class="roles" id="roles"></div>
-            <div class="zones"><span class="zi"><i></i>IndiaAI Mission</span><span class="zb"><i></i>Sells to both</span><span class="zm"><i></i>Open market</span></div></div>
+            <div class="zones"><span class="zi"><i></i>IndiaAI Mission</span><span class="zb"><i></i>Cloud firms (rent to both)</span><span class="zm"><i></i>Open market</span></div></div>
           <div class="cg"><span class="lt">View</span>
             <div class="tgroup">
               <div class="seg" role="group" aria-label="Show as"><button id="v3d" type="button" aria-pressed="true">3D</button><button id="vlist" type="button" aria-pressed="false">List</button></div>
@@ -332,7 +378,7 @@ details.sources li { break-inside: avoid; }
 window.STACK = {
 LAYERS: ["User", "Model", "Home institution", "Allocation", "Funding", "Governance", "Ownership", "Operations", "Facility", "Chips"],
 ROLES: { gov: "Government", user: "Users", home: "Home institution", private: "Indian firm", partner: "Foreign firm", supplier: "Chip maker" },
-ZONES: { L: "IndiaAI Mission", M: "Sells to both", R: "Open market" },
+ZONES: { L: "IndiaAI Mission", M: "Cloud firm: rents to IndiaAI and to anyone", R: "Open market" },
 SOURCES: {
   cab: ["PIB (Cabinet)", "7 Mar 2024", "Cabinet approves IndiaAI Mission", "https://pib.gov.in/PressReleasePage.aspx?PRID=2012355", "primary"],
   memo: ["IndiaAI office memorandum", "29 Jan 2026", "Revised rates after Round 3 of empanelment", "https://d12aarmt01l54a.cloudfront.net/cms/files/revised-rates-post-3rd-round-of-empanelment/1770011698.pdf", "primary"],
@@ -699,6 +745,110 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
 };
 
 </script>
+<script>
+// Story mode: the blog's argument in eleven steps over the 3D stack.
+// Each step names the tubes to draw (with the label shown on each), the blocks to light, and the layers to raise.
+// Pooled tubes (st: true) add several flows of the same kind into one; they appear only in the story.
+(() => {
+  const S = window.STACK;
+  const F = name => { const k = S.FLOWS.findIndex(f => f.name === name); if (k < 0) console.warn("Story: no flow", name); return k; };
+  const IBD = "IndiaAI Independent Business Division";
+  const PROV = ["Yotta Data Services", "E2E Networks", "Ishan Infotech", "Locuz", "Vensysco", "Jio Platforms", "NxtGen", "Tata Communications", "CMS Computers", "Orient Technologies", "Cyfuture", "Neysa"];
+  const NINE = ["BharatGen", "Sarvam AI", "Gnani.ai", "Zenteiq Aitech", "Soket AI", "Gan AI", "Intellihealth", "Avataar AI", "Shodh AI"];
+  const USERS = ["Startups and MSMEs", "Researchers and students", "Government departments and PSUs", "BHASHINI", "Karnataka AI Cell"];
+  const pool = (id, g, name, from, to, v, val, hs) => {
+    S.FLOWS.push({ id, g, name, from, to, v, val, hs, k: "committed", st: true, rows: [] });
+    return S.FLOWS.length - 1;
+  };
+  const pAll = pool("S1", "suppliers", "Compute subsidy approved, all providers", IBD, PROV, 1190.53, "₹1,190.53 cr", "Portal total, 5 Nov 2026");
+  const pNine = pool("S2", "users", "Subsidy to nine model builders", IBD, NINE, 1057.83, "₹1,057.83 cr", "ThePrint, approvals to 8 Oct 2026");
+  const pSmall = pool("S3", "users", "Subsidy to other startups and researchers", IBD, ["Startups and MSMEs", "Researchers and students"], 31.04, "₹31.04 cr", "₹20.9 cr startups + ₹10.14 cr researchers");
+
+  const BS = "https://www.business-standard.com/technology/tech-news/successful-gpu-bidders-likely-to-offer-compute-capacity-to-global-firms-126101100603_1.html";
+  const ETOCT = "https://economictimes.indiatimes.com/tech/technology/indiaai-mission-likely-to-rewire-after-gpu-glitch/articleshow/134600368.cms";
+  const ETMAR = "https://m.economictimes.com/tech/artificial-intelligence/underused-gpus-raise-questions-about-indiaai-capacity-build-out/articleshow/128981840.cms";
+  const PRINT = "https://theprint.in/tech/indiaai-mission-9-model-builders-get-rs-1058-cr-of-govts-compute-subsidy-researchers-only-rs-10-cr/3076401/";
+  const a = (t, u) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`;
+
+  S.STORY = [
+    { kicker: "The claim", side: "both", cam: "all",
+      h: "“There is not enough uptake of GPUs in India.”",
+      p: "A government official, 12 October, on why IndiaAI's GPU providers may be allowed to sell abroad. The mission's own numbers tell a different story.",
+      src: a("Business Standard, 11 Oct 2026", BS), first: true },
+
+    { kicker: "How it works", side: "both",
+      h: "IndiaAI owns almost no GPUs. It rents them from cloud firms.",
+      p: "It pays up to 40% of each user's bill to the firm. The same firms rent the same GPUs to anyone else.",
+      tubes: [[pAll, "Subsidy approved · ₹1,190 cr"]], lit: [IBD, ...PROV],
+      src: "IndiaAI end-user policy; IndiaAI Compute Portal, 5 Nov 2026" },
+
+    { kicker: "The money", side: "iai",
+      h: "₹10,372 crore promised. ₹401 crore arrived.",
+      stats: [["₹10,372 cr", "five-year outlay, approved March 2024"], ["₹401 cr", "reached IndiaAI by Feb 2026 (3.9%)"]],
+      p: "The 2025-26 budget was cut from ₹2,000 crore to ₹800 crore.",
+      tubes: [[F("Mission outlay, by pillar"), "Promised · ₹10,372 cr"], [F("Cash that reached the mission"), "Arrived · ₹401 cr"]],
+      src: "Cabinet release, Mar 2024; Rajya Sabha answer 1668; Union Budget 2026-27" },
+
+    { kicker: "The GPUs", side: "iai",
+      h: "45,000 GPUs promised. About 30,000 reachable.",
+      bars: [["Promised", 100, "45,000"], ["Reachable, October", 67, "~30,000"], ["Assigned to users, March", 38, "38%"], ["In use, March", 22, "22%"]],
+      note: "The October and March figures use different totals.",
+      p: "One provider, Cyfuture, offered about 1,100 GPUs and delivered about 160.",
+      lit: PROV, mark: ["Cyfuture"], caps: ["Cyfuture"],
+      src: `${a("Economic Times, 4 Mar", ETMAR)} and ${a("1 Oct 2026", ETOCT)}` },
+
+    { kicker: "The price", side: "both",
+      h: "Costs doubled. The mission's price stayed fixed.",
+      bars: [["Nvidia H200 chip, a year ago", 50, "$20,000"], ["Nvidia H200 chip, now", 100, "$40,000+"]],
+      note: "The rupee fell from ₹88 to about ₹95 a dollar. IndiaAI's lowest agreed H100 rate: ₹153 an hour, fixed by tender.",
+      p: "So providers sell abroad, for dollars. Over 75% of Yotta's GPUs are contracted overseas.",
+      tubes: [[F("NVIDIA rents capacity from Yotta"), "NVIDIA lease of Yotta · $1 bn+ over 4 years"], [F("Subsidy through Yotta"), "IndiaAI subsidy via Yotta · ₹496 cr"], [F("Overseas customers of E2E"), "E2E overseas · ~₹50 cr a quarter"]],
+      caps: ["Yotta Data Services", "E2E Networks"],
+      src: `${a("Economic Times, 1 Oct 2026", ETOCT)}; IndiaAI rates, Jan 2026; Yotta; E2E results call` },
+
+    { kicker: "The users", side: "iai",
+      h: "Users pay first, wait a month, and get 40% back later.",
+      stats: [["1 month", "requests batched, approved on the 10th"], ["60–100%", "of the bill a user may have to find upfront"]],
+      p: "“I can't afford 100 per cent or even the 60 per cent of that investment upfront.” A bootstrapped founder, to ThePrint.",
+      tubes: [[F("Startups pay their share"), "Startups pay · ₹42 cr"], [F("Researchers pay their share"), "Researchers pay · ₹15 cr"]],
+      lit: USERS,
+      src: `${a("ThePrint", PRINT)}; IndiaAI end-user policy` },
+
+    { kicker: "Who got it", side: "iai",
+      h: "Nine firms got ₹1,058 crore. Researchers got ₹10 crore.",
+      bars: [["9 model builders", 100, "₹1,058 cr"], ["Government users", 15, "₹159 cr"], ["Other startups", 2, "₹21 cr"], ["IndiaAI itself", 1.3, "₹13 cr"], ["All researchers, students, fellows", 1, "₹10 cr"]],
+      p: "Researchers got less than the compute IndiaAI approved for itself.",
+      tubes: [[pNine, "9 model builders · ₹1,058 cr"], [F("Government departments and PSUs"), ""], [F("Other startups and MSMEs"), ""], [F("IndiaAI's own use"), "IndiaAI itself · ₹13 cr"], [F("Researchers, students and fellows"), "Researchers · ₹10 cr"]],
+      src: `${a("ThePrint, 20 Oct 2026", PRINT)}: 304 approvals on the IndiaAI Compute Portal` },
+
+    { kicker: "Idle and waiting", side: "iai",
+      h: "GPUs sat idle while users waited.",
+      bars: [["Committed GPUs not in use, March", 78, "78%"], ["Allocated GPUs users actually used, March", 59, "59%"]],
+      stats: [["29 days", "median wait past researchers' start dates"], ["Declined", "some providers turned down IndiaAI requests to sell abroad"]],
+      lit: [...PROV, ...USERS],
+      src: `${a("Economic Times, 4 Mar", ETMAR)} and ${a("1 Oct 2026", ETOCT)}; ${a("ThePrint", PRINT)}` },
+
+    { kicker: "The demand gap", side: "both",
+      h: "Indian demand for AI is real. It buys from abroad.",
+      bars: [["Indian spending on foreign AI, a year (estimate)", 100, "≈₹23,600 cr"], ["IndiaAI subsidy to startups outside the nine, and researchers", 0.13, "₹31 cr"]],
+      p: "Different things: ready-made AI models against raw GPU hours. That is the point. Startups buy models; the mission sells hours.",
+      tubes: [[F("Indian spending on foreign AI"), "Indian buyers → foreign AI · ≈₹23,600 cr a year (estimate)"], [F("Claude spending in India"), ""], [pSmall, "IndiaAI → other startups, researchers · ₹31 cr"]],
+      src: "Business Today estimate, FY25; ThePrint. Claude's Indian app users alone spent ₹62 crore in one quarter (Sensor Tower)." },
+
+    { kicker: "The fix", side: "iai", cam: "all",
+      h: "Fix the scheme before selling the GPUs abroad.",
+      list: ["Pay the subsidy upfront, as credits users spend on any provider.", "Set a deadline for approvals. Europe's AI Factories promise 10 working days.", "Run Indian and open models as a service, priced in rupees.", "Sell abroad only GPUs already delivered to the mission."],
+      layers: [5, 4, 2, 8],
+      fixes: [[5, "① Subsidy upfront, as credits"], [4, "② Approval deadline"], [2, "③ Models as a service"], [8, "④ Deliver first, then sell abroad"]],
+      src: "Esya Centre blog" },
+
+    { kicker: "Explore", side: "both", cam: "all", last: true,
+      h: "Every block and every rupee we found, with sources.",
+      p: "Not a full count: only published figures are drawn, and each flow says what its number covers." }
+  ];
+})();
+
+</script>
 
 <script>
 /* Page chrome that works with or without WebGL: steps, panel, layer menu, list view, measured charts, sources. */
@@ -771,7 +921,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   // Whose money follows the side shown: IndiaAI Mission (public budget and the subsidy), open market (providers and private), or both.
   const SCOPES = { iai: "IndiaAI Mission", mkt: "Open market", both: "Both sides" };
   const scopeOf = f => f.sc || FG[f.g].sc;
-  const inScope = f => state.side === "both" || scopeOf(f) === state.side;
+  const inScope = f => !f.st && (state.side === "both" || scopeOf(f) === state.side);
   const streamsOn = () => Object.keys(FG).filter(g => state.side === "both" || FG[g].sc === state.side);
   const inGroup = f => inScope(f) && (state.fg === "all" || f.g === state.fg);
   // With all streams on, the subsidy is listed and counted once, by recipient (the by-provider stream repeats it).
@@ -847,7 +997,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
     syncList();
   }
   function closeLayerMoney() { state.aggLayer = null; window.Stack3D?.showLayerMoney(null); showHome(); }
-  const blockMoney = i => { const n = P[i].n, all = S.FLOWS.map((f, k) => [f, k]); return { ins: all.filter(([f]) => f.to.includes(n)).sort(byV), outs: all.filter(([f]) => f.from === n).sort(byV) }; };
+  const blockMoney = i => { const n = P[i].n, all = S.FLOWS.map((f, k) => [f, k]).filter(([f]) => !f.st); return { ins: all.filter(([f]) => f.to.includes(n)).sort(byV), outs: all.filter(([f]) => f.from === n).sort(byV) }; };
   const route = f => `${f.fl || f.from} → ${f.tl || (f.to.length > 2 ? `${f.to.length} recipients` : f.to.join(", "))}`;
   const amt = v => v == null ? "Not public" : `₹${v >= 100 ? Math.round(v).toLocaleString("en-IN") : String(+v.toFixed(2))} cr`;
   function showFlowCard(k) {
@@ -934,7 +1084,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   const zoneOf = (n, z) => P.map((p, i) => i).filter(i => P[i].z === z && P[i].l.includes(n));
   const list = document.getElementById("list");
   const named = i => { const p = P[i]; return `<button class="chip named r-${p.r}${p.logo && p.logo.length > 1 ? " duo" : ""}${p.logo ? "" : " mono"}" data-i="${i}" title="${esc(p.n)}">${p.logo ? p.logo.map(k => `<img src="${S.LOGOS[k]}" alt="">`).join("") : ""}<span>${esc(p.n.replace(/\s*\([^)]*\)/g, ""))}</span></button>`; };
-  list.innerHTML = `<div class="lrow head"><span>Layer</span><span data-z="L">IndiaAI Mission</span><span data-z="M">Sells to both</span><span data-z="R">Open market</span></div>` +
+  list.innerHTML = `<div class="lrow head"><span>Layer</span><span data-z="L">IndiaAI Mission</span><span data-z="M">Cloud firms</span><span data-z="R">Open market</span></div>` +
     S.LAYERS.map((name, k) => { const n = k + 1; return `<div class="lrow" data-n="${n}"><button class="ln" type="button" data-n="${n}"><b>${n}</b>${name}<small></small></button>${["L", "M", "R"].map(z => {
       const ids = zoneOf(n, z), nt = note(z, n);
       return `<div class="lcell" data-z="${z}"><span class="z">${S.ZONES[z]}</span>${ids.map(named).join("")}${nt ? `<em>${esc(nt)}</em>` : ""}</div>`; }).join("")}</div>`; }).join("");
@@ -981,12 +1131,54 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
 
   document.getElementById("srclist").innerHTML = srcIds.map(id => { const s = S.SOURCES[id]; return `<li>${s[3] ? `<a href="${esc(s[3])}" target="_blank" rel="noopener">${esc(s[2])}</a>` : esc(s[2])}. ${esc(s[0])}, ${esc(s[1])}${s[4] === "primary" ? " (primary)" : ""}.</li>`; }).join("");
 
+  // Story mode: cards scroll past the fixed stage; the card at mid-screen sets what the 3D view shows.
+  const fig = document.querySelector(".fig"), storyEl = document.getElementById("story"), sdots = document.getElementById("sdots"), stageEl = document.getElementById("stage");
+  let io = null;
+  function storyCard(s, i) {
+    const stats = s.stats ? `<div class="sstats">${s.stats.map(([b, t]) => `<div><b>${b}</b><span>${t}</span></div>`).join("")}</div>` : "";
+    const bars = s.bars ? `<div class="sbars">${s.bars.map(([l, v, t]) => `<div class="sb"><span>${l}</span><b>${t}</b><i><em style="width:${v}%"></em></i></div>`).join("")}</div>` : "";
+    const list = s.list ? `<ol class="sfix">${s.list.map(x => `<li>${x}</li>`).join("")}</ol>` : "";
+    return `<section class="sstep" data-i="${i}"><div class="scard"><span class="skick">${i + 1} / ${S.STORY.length} · ${s.kicker}</span><h2>${s.h}</h2>${stats}${bars}${s.note ? `<p class="snote">${s.note}</p>` : ""}${s.p ? `<p>${s.p}</p>` : ""}${list}${s.last ? `<button class="sgo" type="button">Explore the stack →</button>` : ""}${s.src ? `<p class="ssrc">Source: ${s.src}</p>` : ""}${s.first ? `<p class="sscroll">Scroll to continue ↓</p>` : ""}</div></section>`;
+  }
+  function goStep(i) {
+    if (state.story === i) return;
+    state.story = i;
+    sdots.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-current", String(j === i)));
+    window.Stack3D?.story(i);
+  }
+  function enterStory(scroll) {
+    hidePop(); setList(false);
+    if (!storyEl.childElementCount) {
+      storyEl.innerHTML = S.STORY.map(storyCard).join("");
+      sdots.innerHTML = S.STORY.map((s, i) => `<button type="button" aria-label="Step ${i + 1}: ${esc(s.kicker)}"></button>`).join("");
+      sdots.querySelectorAll("button").forEach((b, i) => b.addEventListener("click", () => storyEl.children[i].scrollIntoView({ behavior: "smooth", block: "start" })));
+      storyEl.querySelector(".sgo").addEventListener("click", exitStory);
+    }
+    fig.classList.add("storymode"); storyEl.hidden = false; state.story = null;
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) goStep(+e.target.dataset.i); }), { rootMargin: "-50% 0px -50% 0px" });
+    [...storyEl.children].forEach(c => io.observe(c));
+    goStep(0);
+    if (scroll) storyEl.firstElementChild.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function exitStory() {
+    io?.disconnect(); io = null;
+    fig.classList.remove("storymode"); storyEl.hidden = true; state.story = null;
+    window.Stack3D?.story(null);
+    showHome();
+    stageEl.scrollIntoView({ block: "start" });
+  }
+  document.getElementById("sskip").addEventListener("click", exitStory);
+  document.getElementById("replay").addEventListener("click", () => enterStory(true));
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && state.story != null) { e.stopImmediatePropagation(); exitStory(); } }, true);
+
   window.UI = { peek, showHome, showPlayer, showLayer, setFocus, state, setList, showFlowCard, closeFlow, showLayerMoney, layerTotals, listable, inGroup, cr, KINDS };
   const h0 = location.hash;
   const start = { pool: ["iai", "off"], market: ["both", "off"], open: ["mkt", "off"], money: ["both", "flows"] }[location.hash.slice(1)];
   if (start) [state.side, state.money] = start;
   showHome();
   if (h0 === "#list") setList(true);
+  else if (!start) enterStory(false);
   setTimeout(() => {
     if (!window.Stack3D) {
       document.getElementById("loading").textContent = "The 3D view could not start in this browser, so the list view is shown.";
@@ -1153,7 +1345,7 @@ function buildSlabs() {
   S.NOTES.forEach(nt => label("lbl-note", esc(nt.t), new V3(zoneMid(nt.z), yOf(nt.n) + 0.55, 0.2), nt.z, "note", { n: nt.n }));
   const plinth = z => new V3(zoneMid(z), yOf(NL) - ST, DEPTH / 2 + 0.2);
   label("lbl-title", `IndiaAI Mission<small>government pool</small>`, plinth("L"), "L", "title");
-  label("lbl-title", `Sells to both<small>same firms, same GPUs</small>`, plinth("M"), "M", "title");
+  label("lbl-title", `Cloud firms<small>rent GPUs to IndiaAI and to anyone</small>`, plinth("M"), "M", "title");
   label("lbl-title", `Open market<small>outside the mission</small>`, plinth("R"), "R", "title");
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.ShadowMaterial({ opacity: 0.12 }));
   ground.rotation.x = -Math.PI / 2; ground.position.y = yOf(NL) - 0.35; ground.receiveShadow = true; scene.add(ground);
@@ -1322,7 +1514,7 @@ document.getElementById("rotl").addEventListener("click", () => turn(-Math.PI / 
 document.getElementById("rotr").addEventListener("click", () => turn(Math.PI / 5));
 
 /* ---------- state ---------- */
-let role = null, sel = null, hover = null, focus = null, selFlow = null, hoverFlow = null;
+let role = null, sel = null, hover = null, focus = null, selFlow = null, hoverFlow = null, story = null, storyStep = null;
 let side = UI.state.side, moneyOn = UI.state.money !== "off", aggOn = UI.state.money === "layers", aggLayer = null;
 const inGroup = f => UI.inGroup(f);
 const endsOf = f => new Set([f.from, ...f.to].map(n => P.findIndex(p => p.n === n)));
@@ -1330,6 +1522,8 @@ const PIX = Object.fromEntries(P.map((p, i) => [p.n, i]));
 const layerOfN = n => Math.min(...P[PIX[n]].l);
 // A selected block shows all its money, in every stream; a selected layer shows the flows that enter or leave it.
 function flowShown(f) {
+  if (story) return story.fl.has(f);
+  if (f.st) return false;
   if (!moneyOn || focus != null) return false;
   if (sel != null) return f.from === P[sel].n || f.to.includes(P[sel].n);
   if (aggLayer != null) return UI.listable(f) && (layerOfN(f.from) === aggLayer || layerOfN(f.to[0]) === aggLayer);
@@ -1345,6 +1539,7 @@ function refresh(initial) {
     u.target = show ? 1 : 0;
     if (initial) u.delay = t0 + (reduce ? 0 : 120 + (NL - b.it.b) * 70 + Math.random() * 120);
     else u.delay = show && u.vis < 0.5 ? t0 + (reduce ? 0 : (NL - b.it.b) * 40) : t0;
+    if (story) { u.dimT = !story.lit.size || story.lit.has(u.i) ? 1 : 0.14; u.glowT = story.mark.has(u.i) ? 1 : 0; b.cap.target = show && story.caps.has(u.i) ? 1 : 0; return; }
     const inLayer = focus == null || (b.it.a <= focus && focus <= b.it.b);
     let lit = inLayer;
     if (lit && moneyOn && focus == null && (sel != null || selFlow != null || aggLayer != null || !role)) lit = selFlow != null ? endsOf(S.FLOWS[selFlow]).has(u.i) : sel === u.i || shownEnds.has(u.i);
@@ -1356,13 +1551,14 @@ function refresh(initial) {
   });
   slabs.forEach(s => {
     const on = zoneOn(s.z);
-    s.target = !on ? 0 : focus == null ? 1 : (s.n === focus ? 1.5 : 0.15);
+    s.target = !on ? 0 : story && story.layers.size ? (story.layers.has(s.n) ? 1.5 : 0.3) : focus == null ? 1 : (s.n === focus ? 1.5 : 0.15);
     s.delay = initial ? t0 + (reduce ? 0 : (NL - s.n) * 60) : t0;
   });
   labelObjs.forEach(l => {
     if (l.kind === "cap") return;
-    if (l.kind === "layer") { l.target = focus == null || l.n === focus ? 1 : 0.35; l.el.classList.toggle("on", l.n === focus); }
-    else if (l.kind === "note") l.target = !moneyOn && zoneOn(l.zone) && (focus == null || l.n === focus) ? 1 : 0;
+    if (l.kind === "st") { l.target = story && story.tags.has(l) ? 1 : 0; return; }
+    if (l.kind === "layer") { const on = story ? story.layers.has(l.n) : l.n === focus; l.target = story ? (story.layers.size && !on ? 0.45 : 1) : (focus == null || on ? 1 : 0.35); l.el.classList.toggle("on", on); }
+    else if (l.kind === "note") l.target = !story && !moneyOn && zoneOn(l.zone) && (focus == null || l.n === focus) ? 1 : 0;
     else if (l.kind === "flow") l.target = moneyOn && focus == null ? 1 : 0;
     else if (l.kind === "agg") l.target = moneyOn && aggOn && focus == null ? 1 : 0;
     else l.target = zoneOn(l.zone) && focus == null ? 1 : (zoneOn(l.zone) ? 0.3 : 0);
@@ -1547,13 +1743,58 @@ updateAgg();
 blocks.forEach(showBlock); slabs.forEach(showSlab); flows.forEach(showFlow);
 document.getElementById("loading").hidden = true;
 requestAnimationFrame(tick);
-new ResizeObserver(() => { resize(); updateAgg(); }).observe(stage);
+new ResizeObserver(() => { resize(); updateAgg(); if (storyStep) flyTo(fit(storyBox(storyStep), ANGLED, 0.92), true); }).observe(stage);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 new IntersectionObserver(es => { running = es[0].isIntersecting && !stage.hidden; dirty = true; }).observe(stage);
 stage.addEventListener("keydown", e => { if (e.key === "+" || e.key === "=") zoomBy(1.25); if (e.key === "-") zoomBy(1 / 1.25); });
 
+/* ---------- story mode: each step sets the tubes, lit blocks, raised layers and camera ---------- */
+const stLabels = new Map(), fixLabels = new Map();
+function tubeLabel(k) {
+  if (!stLabels.has(k)) { const fl = flows.find(x => x.k === k); stLabels.set(k, label("lbl-st", "", fl.curve.getPoint(0.5).add(new V3(0, 0.35, 0)), fl.zone, "st")); }
+  return stLabels.get(k);
+}
+function fixLabel(n) { if (!fixLabels.has(n)) fixLabels.set(n, label("lbl-fix", "", new V3(), "L", "st", { n })); return fixLabels.get(n); }
+// The camera frames what the step lights, leaving room for the card: on the left on wide screens, at the bottom on phones.
+function storyBox(st) {
+  let box;
+  if (st.cam === "all") box = stackBox();
+  else {
+    box = new THREE.Box3();
+    blocks.forEach(b => { if (story.lit.has(b.g.userData.i) && zoneOn(b.it.z)) { box.expandByPoint(new V3(b.it.x - 0.6, yOf(b.it.b), b.it.zz)); box.expandByPoint(new V3(b.it.x + 0.6, yOf(b.it.a) + BH + 0.3, b.it.zz)); } });
+    flows.forEach(fl => { if (story.fl.has(fl.f)) for (let t = 0; t <= 1; t += 0.125) box.expandByPoint(fl.curve.getPoint(t)); });
+    if (box.isEmpty()) box = stackBox();
+    box.min.z = -DEPTH / 2; box.max.z = DEPTH / 2; box.expandByScalar(0.6);
+    // Never zoom in so far that the stack loses its context: at least half the stack's width and 60% of its height.
+    const ss = stackBox().getSize(new V3()), c = box.getCenter(new V3()), sz = box.getSize(new V3());
+    const hw = Math.max(sz.x, ss.x * 0.5) / 2, hh = Math.max(sz.y, ss.y * 0.6) / 2;
+    box.min.x = c.x - hw; box.max.x = c.x + hw; box.min.y = c.y - hh; box.max.y = c.y + hh;
+  }
+  const w = box.max.x - box.min.x, h = box.max.y - box.min.y;
+  if (narrow()) { box.min.y -= h * 0.85; if (st.cam !== "all") box.min.x -= 4.6; } else box.min.x -= w * 0.78;
+  return box;
+}
 window.Stack3D = {
+  story(i) {
+    if (i == null) {
+      story = storyStep = null; controls.enabled = true;
+      side = UI.state.side; moneyOn = UI.state.money !== "off"; aggOn = UI.state.money === "layers";
+      placeLayerLabels(); refresh(); updateAgg(); frame(); return;
+    }
+    const st = storyStep = S.STORY[i];
+    controls.enabled = false; sel = focus = selFlow = aggLayer = hover = role = null; moneyOn = aggOn = false;
+    side = st.side || "both"; placeLayerLabels();
+    const tubes = (st.tubes || []).filter(([k]) => k >= 0 && flows.some(fl => fl.k === k));
+    const ix = n => PIX[n];
+    story = { fl: new Set(tubes.map(([k]) => S.FLOWS[k])), lit: new Set((st.lit || []).map(ix)), mark: new Set((st.mark || []).map(ix)), caps: new Set((st.caps || []).map(ix)), layers: new Set(st.layers || []), tags: new Set() };
+    tubes.forEach(([k, t]) => { endsOf(S.FLOWS[k]).forEach(x => story.lit.add(x)); if (!t) return; const l = tubeLabel(k); l.el.firstChild.textContent = t; story.tags.add(l); });
+    const vz = ZONES.filter(zoneOn);
+    (st.fixes || []).forEach(([n, t]) => { const l = fixLabel(n); l.el.firstChild.textContent = t; l.o.position.set(zoneMid(vz[0]), yOf(n) + 0.12, DEPTH / 2 + 0.25); story.tags.add(l); });
+    story.lit.delete(undefined); story.lit.delete(-1);
+    resize(); refresh(); updateAgg();
+    flyTo(fit(storyBox(st), ANGLED, 0.92));
+  },
   setView() {
     side = UI.state.side; moneyOn = UI.state.money !== "off"; aggOn = UI.state.money === "layers";
     sel = null; focus = null; selFlow = null; aggLayer = null;
@@ -1577,6 +1818,7 @@ window.Stack3D = {
   },
   pause(p) { running = !p; if (!p) { resize(); dirty = true; } }
 };
+if (UI.state.story != null) { const k = UI.state.story; UI.state.story = null; window.Stack3D.story(k); UI.state.story = k; }
 </script>
 
 </body>
