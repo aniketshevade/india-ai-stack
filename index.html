@@ -1772,7 +1772,7 @@ function storyBox(st) {
     box.min.x = c.x - hw; box.max.x = c.x + hw; box.min.y = c.y - hh; box.max.y = c.y + hh;
   }
   const w = box.max.x - box.min.x, h = box.max.y - box.min.y;
-  if (narrow()) { box.min.y -= h * 0.85; if (st.cam !== "all") box.min.x -= 4.6; } else box.min.x -= w * 0.78;
+  if (narrow()) { box.min.y -= h * 0.85; if (st.cam !== "all") box.min.x = Math.min(box.min.x, x0[ZONES.filter(zoneOn)[0]] - 4.6); } else box.min.x -= w * 0.78;
   return box;
 }
 window.Stack3D = {
