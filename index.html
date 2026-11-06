@@ -274,15 +274,21 @@ details.sources li { break-inside: avoid; }
 .sbar, .story { display: none; }
 .storymode .layout { grid-template-columns: minmax(0, 1fr); }
 .storymode .side, .storymode .hint, .storymode .touchhint, .storymode .peek { display: none !important; }
-.storymode .stage { position: sticky; top: 0; height: 100vh; height: 100dvh; min-height: 0; touch-action: auto; }
+.storymode .stage { height: min(780px, calc(100vh - 24px)); height: min(780px, calc(100dvh - 24px)); min-height: 480px; touch-action: pan-y; }
 .storymode .stage canvas, .storymode .stage .labels, .storymode .stage .labels * { pointer-events: none !important; }
 .storymode .sbar { display: flex; position: absolute; top: 12px; right: 12px; z-index: 6; gap: 12px; align-items: center; }
 .sdots { display: flex; gap: 6px; }
 .sdots button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1px solid var(--muted); background: transparent; cursor: pointer; }
 .sdots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
 .sskip .slim { display: none; } .sskip { white-space: nowrap; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 88%, transparent); border-radius: 999px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; }
-.storymode .story { display: block; position: relative; z-index: 5; margin-top: -100vh; margin-top: -100dvh; pointer-events: none; }
-.sstep { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; padding: 56px 24px; }
+.storymode .story { display: block; position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.sstep { position: absolute; inset: 0; display: flex; align-items: center; padding: 56px 24px 24px; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s; }
+.sstep.on { opacity: 1; visibility: visible; transform: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+.snav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
+.snav button { border: 1px solid var(--line); background: var(--soft); border-radius: 6px; padding: 7px 12px; font-size: 0.86rem; cursor: pointer; }
+.snav button:disabled { opacity: 0.35; cursor: default; }
+.snav .snext { border: 0; background: var(--accent); color: var(--bg); font-weight: 700; padding: 8px 16px; }
+.snav span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); }
 .scard { pointer-events: auto; width: min(400px, 100%); background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; box-shadow: 0 10px 30px rgb(0 0 0 / 0.25); }
 .skick { font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .scard h2 { margin: 6px 0 10px; font-family: var(--f-display); font-stretch: 82%; font-weight: 800; font-size: 1.45rem; line-height: 1.12; text-wrap: balance; }
@@ -299,14 +305,15 @@ details.sources li { break-inside: avoid; }
 .sfix { margin: 8px 0 0; padding-left: 1.3em; font-size: 0.92rem; line-height: 1.4; } .sfix li { margin: 5px 0; }
 .scard .ssrc { font-size: 0.72rem; color: var(--muted); margin-top: 12px; }
 .scard .sscroll { font-family: var(--f-mono); font-size: 0.75rem; color: var(--accent); }
-.sgo { margin-top: 12px; border: 0; border-radius: 6px; padding: 9px 16px; background: var(--accent); color: var(--bg); font-weight: 700; cursor: pointer; }
 .replay { border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 6px; padding: 6px 10px; font-weight: 600; cursor: pointer; justify-self: start; }
 .lbl-st > span, .lbl-fix > span { display: block; white-space: nowrap; font-family: var(--f-display); font-stretch: 82%; font-weight: 700; font-size: 13px; padding: 3px 8px; border-radius: 5px; background: color-mix(in srgb, var(--paper) 90%, transparent); border: 1px solid var(--line); color: var(--ink); }
 .lbl-st > span { transform: translateY(-60%); }
 .lbl-fix > span { color: var(--accent); border-color: var(--accent); box-shadow: 0 2px 8px rgb(0 0 0 / 0.3); }
 @media (max-width: 640px) {
-  .sstep { align-items: flex-end; padding: 0 8px 14px; }
-  .scard { width: 100%; padding: 14px 15px; }
+  .sstep { align-items: flex-start; padding: 50px 8px 8px; }
+  .scard { width: 100%; padding: 14px 15px 0; max-height: 64%; overflow-y: auto; overscroll-behavior: contain; }
+  .scard .snav { position: sticky; bottom: 0; margin: 10px -15px 0; padding: 10px 15px 12px; background: var(--paper); border-top: 1px solid var(--line); }
+  .scard .sscroll { margin: 0 0 10px; }
   .scard h2 { font-size: 1.2rem; }
   .sstats b { font-size: 1.3rem; }
   .storymode .sbar { top: 8px; left: 8px; right: 8px; justify-content: space-between; }
@@ -334,10 +341,10 @@ details.sources li { break-inside: avoid; }
           <span class="touchhint" id="touchhint">One finger turns · pinch to zoom · tap a block</span>
           <div class="tip" id="tip" hidden></div>
           <button class="peek" id="peek" type="button"></button>
+          <div class="story" id="story" hidden></div>
           <div class="sbar"><div class="sdots" id="sdots" aria-label="Story steps"></div><button class="sskip" id="sskip" type="button"><span class="wide">Skip to the explorer</span><span class="slim">Skip</span> →</button></div>
         </div>
         <div class="list" id="list" hidden></div>
-        <div class="story" id="story" hidden></div>
       </div>
       <aside class="side" aria-label="Controls and details">
         <div class="panel pop" id="pop" hidden role="dialog" aria-label="Money flow details" tabindex="-1"></div>
@@ -1133,16 +1140,19 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
 
   // Story mode: cards scroll past the fixed stage; the card at mid-screen sets what the 3D view shows.
   const fig = document.querySelector(".fig"), storyEl = document.getElementById("story"), sdots = document.getElementById("sdots"), stageEl = document.getElementById("stage");
-  let io = null;
   function storyCard(s, i) {
     const stats = s.stats ? `<div class="sstats">${s.stats.map(([b, t]) => `<div><b>${b}</b><span>${t}</span></div>`).join("")}</div>` : "";
     const bars = s.bars ? `<div class="sbars">${s.bars.map(([l, v, t]) => `<div class="sb"><span>${l}</span><b>${t}</b><i><em style="width:${v}%"></em></i></div>`).join("")}</div>` : "";
     const list = s.list ? `<ol class="sfix">${s.list.map(x => `<li>${x}</li>`).join("")}</ol>` : "";
-    return `<section class="sstep" data-i="${i}"><div class="scard"><span class="skick">${i + 1} / ${S.STORY.length} · ${s.kicker}</span><h2>${s.h}</h2>${stats}${bars}${s.note ? `<p class="snote">${s.note}</p>` : ""}${s.p ? `<p>${s.p}</p>` : ""}${list}${s.last ? `<button class="sgo" type="button">Explore the stack →</button>` : ""}${s.src ? `<p class="ssrc">Source: ${s.src}</p>` : ""}${s.first ? `<p class="sscroll">Scroll to continue ↓</p>` : ""}</div></section>`;
+    return `<section class="sstep" data-i="${i}"><div class="scard"><span class="skick">${s.kicker}</span><h2>${s.h}</h2>${stats}${bars}${s.note ? `<p class="snote">${s.note}</p>` : ""}${s.p ? `<p>${s.p}</p>` : ""}${list}${s.src ? `<p class="ssrc">Source: ${s.src}</p>` : ""}<div class="snav"><button class="sprev" type="button"${i ? "" : " disabled"}>← Back</button><span>${i + 1} / ${S.STORY.length}</span><button class="snext" type="button">${s.last ? "Explore the stack →" : "Next →"}</button></div>${s.first ? `<p class="sscroll">Or use the arrow keys, or swipe</p>` : ""}</div></section>`;
   }
-  function goStep(i) {
+  // On phones, a tap or swipe also brings the whole slide (card above, figure below) into view.
+  function goStep(i, user) {
+    i = Math.max(0, Math.min(S.STORY.length - 1, i));
+    if (user && matchMedia("(max-width: 640px)").matches && Math.abs(stageEl.getBoundingClientRect().top) > 4) stageEl.scrollIntoView({ behavior: "smooth", block: "start" });
     if (state.story === i) return;
     state.story = i;
+    [...storyEl.children].forEach((c, j) => c.classList.toggle("on", j === i));
     sdots.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-current", String(j === i)));
     window.Stack3D?.story(i);
   }
@@ -1151,18 +1161,16 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
     if (!storyEl.childElementCount) {
       storyEl.innerHTML = S.STORY.map(storyCard).join("");
       sdots.innerHTML = S.STORY.map((s, i) => `<button type="button" aria-label="Step ${i + 1}: ${esc(s.kicker)}"></button>`).join("");
-      sdots.querySelectorAll("button").forEach((b, i) => b.addEventListener("click", () => storyEl.children[i].scrollIntoView({ behavior: "smooth", block: "start" })));
-      storyEl.querySelector(".sgo").addEventListener("click", exitStory);
+      sdots.querySelectorAll("button").forEach((b, i) => b.addEventListener("click", () => goStep(i, true)));
+      storyEl.querySelectorAll(".sprev").forEach(b => b.addEventListener("click", () => goStep(state.story - 1, true)));
+      storyEl.querySelectorAll(".snext").forEach((b, j) => b.addEventListener("click", () => j === S.STORY.length - 1 ? exitStory() : goStep(state.story + 1, true)));
     }
     fig.classList.add("storymode"); storyEl.hidden = false; state.story = null;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
-    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) goStep(+e.target.dataset.i); }), { rootMargin: "-50% 0px -50% 0px" });
-    [...storyEl.children].forEach(c => io.observe(c));
     goStep(0);
-    if (scroll) storyEl.firstElementChild.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (scroll) stageEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
   function exitStory() {
-    io?.disconnect(); io = null;
     fig.classList.remove("storymode"); storyEl.hidden = true; state.story = null;
     window.Stack3D?.story(null);
     showHome();
@@ -1170,7 +1178,20 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   }
   document.getElementById("sskip").addEventListener("click", exitStory);
   document.getElementById("replay").addEventListener("click", () => enterStory(true));
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && state.story != null) { e.stopImmediatePropagation(); exitStory(); } }, true);
+  document.addEventListener("keydown", e => {
+    if (state.story == null || (e.target.closest && e.target.closest("select, input, textarea"))) return;
+    const step = { ArrowRight: 1, PageDown: 1, ArrowLeft: -1, PageUp: -1 }[e.key];
+    if (e.key === "Escape") { e.stopImmediatePropagation(); exitStory(); }
+    else if (step) { e.preventDefault(); e.stopImmediatePropagation(); goStep(state.story + step, true); }
+  }, true);
+  // Swipe left or right on the figure to change slide; vertical swipes still scroll the page.
+  let sw = null;
+  stageEl.addEventListener("touchstart", e => { if (state.story != null && e.touches.length === 1) sw = [e.touches[0].clientX, e.touches[0].clientY]; }, { passive: true });
+  stageEl.addEventListener("touchend", e => {
+    if (!sw || state.story == null) return;
+    const dx = e.changedTouches[0].clientX - sw[0], dy = e.changedTouches[0].clientY - sw[1]; sw = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) goStep(state.story + (dx < 0 ? 1 : -1), true);
+  }, { passive: true });
 
   window.UI = { peek, showHome, showPlayer, showLayer, setFocus, state, setList, showFlowCard, closeFlow, showLayerMoney, layerTotals, listable, inGroup, cr, KINDS };
   const h0 = location.hash;
@@ -1772,7 +1793,7 @@ function storyBox(st) {
     box.min.x = c.x - hw; box.max.x = c.x + hw; box.min.y = c.y - hh; box.max.y = c.y + hh;
   }
   const w = box.max.x - box.min.x, h = box.max.y - box.min.y;
-  if (narrow()) { box.min.y -= h * 0.85; if (st.cam !== "all") box.min.x = Math.min(box.min.x, x0[ZONES.filter(zoneOn)[0]] - 4.6); } else box.min.x -= w * 0.78;
+  if (narrow()) { box.max.y += h * 1.4; if (st.cam !== "all") box.min.x = Math.min(box.min.x, x0[ZONES.filter(zoneOn)[0]] - 4.6); } else box.min.x -= w * 0.78;
   return box;
 }
 window.Stack3D = {
