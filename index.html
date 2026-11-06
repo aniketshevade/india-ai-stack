@@ -726,7 +726,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   let peekTimer = 0;
   function peek(label) {
     peekBtn.classList.remove("show");
-    if (state.flow != null) return;
+    if (!pop.hidden) return;
     if (!matchMedia("(max-width: 960px)").matches || panel.getBoundingClientRect().top < innerHeight - 80) return;
     peekBtn.textContent = `${label} · details ↓`;
     peekBtn.classList.add("show");
@@ -864,13 +864,16 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
         <div class="sm">${r.per ? `<span>${esc(r.per)}</span>` : ""}<span class="st ${r.st}">${ST[r.st] || r.st}</span>${r.src ? srcLink(r.src) : ""}${r.note ? `<span>${esc(r.note)}</span>` : ""}</div></div>`).join("")}</div>
       ${f.why ? `<div class="why">${esc(f.why)}</div>` : ""}
       <div class="meta"><button class="back" type="button">${state.sel != null ? `Back to ${esc(P[state.sel].n)}` : state.aggLayer != null ? `Back to layer ${state.aggLayer}` : "Close"}</button><span>Esc to close.</span></div></div>`;
-    pop.querySelectorAll(".back, .x").forEach(b => b.addEventListener("click", closeFlow));
-    pop.hidden = false; side.classList.add("popped"); side.scrollTop = 0; pop.scrollTop = 0;
-    pop.focus({ preventScroll: true });
+    openPop(closeFlow);
     syncList();
   }
   // Close the tube pop-over; any view change does this too.
   function hidePop() { if (pop.hidden) return; pop.hidden = true; side.classList.remove("popped"); }
+  function openPop(close) {
+    pop.querySelectorAll(".back, .x").forEach(b => b.addEventListener("click", close));
+    pop.hidden = false; side.classList.add("popped"); side.scrollTop = 0; pop.scrollTop = 0;
+    pop.focus({ preventScroll: true });
+  }
   function closeFlow() {
     hidePop();
     state.flow = null; window.Stack3D?.selectFlow(null);
@@ -891,22 +894,22 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
     panel.querySelector(".back").addEventListener("click", () => setFocus(null));
     syncList();
   }
+  function closePlayer() { window.Stack3D?.select(null); state.sel = null; hidePop(); state.focus ? showLayer(state.focus) : showHome(); }
   function showPlayer(i) {
-    hidePop();
     const p = P[i]; state.sel = i; state.flow = null;
     const m = blockMoney(i), nm = m.ins.length + m.outs.length;
     const money = state.money !== "off" && !state.focus
       ? (nm ? `<div class="bmoney">${sec(`Money ${esc(p.n)} receives`, m.ins)}${sec(`Money ${esc(p.n)} pays out`, m.outs)}</div>` : `<p class="nomoney">No money flow is recorded for this block.</p>`)
       : nm ? `<button class="seemoney" type="button">See its money: ${nm} flow${nm > 1 ? "s" : ""}</button>` : "";
-    panel.style.setProperty("--rc", `var(--r-${p.r})`);
-    panel.innerHTML = `${plate(p)}<div><h2>${esc(p.n)}</h2>
+    pop.style.setProperty("--rc", `var(--r-${p.r})`);
+    pop.innerHTML = `<button class="x" type="button" aria-label="Close">×</button>${plate(p)}<div><h2>${esc(p.n)}</h2>
       <div class="tags"><span class="role">${S.ROLES[p.r]}</span><span>${S.ZONES[p.z]}</span><span>Holds ${p.l.map(n => `${n} ${S.LAYERS[n - 1]}`).join(", ")}</span></div>
       <p>${esc(p.w)}</p>
-      <div class="meta"><span class="st ${p.st}">${ST[p.st]}</span>${srcLink(p.src)}<button class="back" type="button">${state.focus ? `Back to layer ${state.focus}` : state.money !== "off" ? "All money flows" : "Back"}</button></div>
+      <div class="meta"><span class="st ${p.st}">${ST[p.st]}</span>${srcLink(p.src)}<button class="back" type="button">${state.focus ? `Back to layer ${state.focus}` : "Close"}</button></div>
       ${money}</div>`;
-    panel.querySelector(".back").addEventListener("click", () => { window.Stack3D?.select(null); state.sel = null; state.focus ? showLayer(state.focus) : showHome(); });
-    if (state.money !== "off") wireRows(panel);
-    panel.querySelector(".seemoney")?.addEventListener("click", () => { setView(null, "flows"); window.Stack3D?.select(i); showPlayer(i); });
+    if (state.money !== "off") wireRows(pop);
+    openPop(closePlayer);
+    pop.querySelector(".seemoney")?.addEventListener("click", () => { setView(null, "flows"); window.Stack3D?.select(i); showPlayer(i); });
     syncList();
   }
   function setFocus(n) {
