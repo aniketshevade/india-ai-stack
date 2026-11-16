@@ -321,6 +321,62 @@ details.sources li { break-inside: avoid; }
   .lbl-st > span { display: none; }
   .lbl-fix > span { font-size: 10.5px; white-space: normal; max-width: 140px; text-align: center; }
 }
+/* ---------- tabs: the stack, and the compute portal's approvals ---------- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin-top: 6px; }
+.tabs button { border: 0; background: none; padding: 8px 14px 9px; min-height: 42px; font-family: var(--f-display); font-stretch: 84%; font-weight: 700; font-size: 1rem; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+@media (max-width: 600px) { .tabs button { padding: 8px 10px 9px; font-size: 0.94rem; } }
+.tabpane { display: grid; gap: 16px; min-width: 0; }
+.phead { display: grid; gap: 6px; }
+.phead h2 { margin: 0; font-family: var(--f-display); font-stretch: 80%; font-weight: 800; font-size: clamp(1.35rem, 3vw, 1.85rem); line-height: 1.1; text-wrap: balance; }
+.pdeck { margin: 0; color: var(--muted); max-width: 72ch; }
+.pstats { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 6px; align-items: end; }
+.pstats div { display: grid; }
+.pstats b { font-family: var(--f-display); font-stretch: 80%; font-weight: 800; font-size: 1.5rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.pstats span { font-size: 0.82rem; color: var(--muted); }
+.pstats .pdate span { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.04em; }
+.playout { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 16px; align-items: start; }
+@media (max-width: 960px) { .playout { grid-template-columns: minmax(0, 1fr); } }
+.pchart { min-width: 0; }
+.pcols { display: flex; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.pcols span:last-child { text-align: right; }
+#psvg { display: block; width: 100%; overflow: visible; }
+#psvg .pband { opacity: 0.42; transition: opacity 0.15s; cursor: pointer; }
+#psvg.has-sel .pband { opacity: 0.07; }
+#psvg.has-sel .pband.on { opacity: 0.8; }
+@media (hover: hover) { #psvg .pband:hover { opacity: 0.85; } }
+#psvg .pnode { cursor: pointer; }
+#psvg .pnode text { transition: opacity 0.15s; }
+#psvg.has-sel .pnode:not(.on) text, #psvg.has-sel .pnode:not(.on) rect { opacity: 0.35; }
+#psvg .pnode .hit { opacity: 1 !important; }
+#psvg .pn { font-family: var(--f-body); font-weight: 650; font-size: 13px; fill: var(--ink); }
+#psvg .pv { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); }
+@media (max-width: 600px) { #psvg .pn { font-size: 12px; } #psvg .pv { font-size: 10.5px; } }
+.pdet { grid-template-columns: minmax(0, 1fr); gap: 6px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; scroll-margin-top: 8px; }
+@media (max-width: 960px) { .pdet { position: static; max-height: none; overflow: visible; } }
+.pdet h2 { margin: 0; font-family: var(--f-display); font-stretch: 80%; font-weight: 800; font-size: 1.25rem; line-height: 1.15; }
+.pdet h3 { margin: 10px 0 0; font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.pdet p { margin: 0; }
+.pdet .meta { font-size: 0.86rem; color: var(--muted); }
+.pamt { font-family: var(--f-display); font-stretch: 76%; font-weight: 800; font-size: 1.8rem; line-height: 1; color: var(--rc); margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+.pamt small { display: block; font-family: var(--f-body); font-stretch: 100%; font-weight: 400; font-size: 0.84rem; color: var(--muted); margin-top: 5px; }
+.plist, .porgs { display: grid; gap: 1px; }
+.prow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; width: 100%; text-align: left; border: 0; background: none; padding: 6px 6px; border-radius: 4px; cursor: pointer; }
+.prow:hover { background: var(--paper); }
+.prow span { font-size: 0.9rem; line-height: 1.25; }
+.prow span i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--rc); margin-right: 7px; vertical-align: -1px; }
+.prow b, .porg b { font-family: var(--f-mono); font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prow em { grid-column: 1 / -1; display: block; height: 5px; border-radius: 3px; background: var(--rc); }
+.prow small { grid-column: 1 / -1; color: var(--muted); font-size: 0.76rem; margin-top: -2px; }
+.porg { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 5px 6px; border-bottom: 1px solid var(--line); font-size: 0.88rem; line-height: 1.25; }
+.porg small { display: block; color: var(--muted); font-size: 0.74rem; margin-top: 2px; }
+.porg.ind span { font-style: italic; }
+.pall { display: contents; }
+.pall[hidden] { display: none !important; }
+.pback, .pmore { justify-self: start; border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 4px 10px; min-height: 32px; font-size: 0.82rem; cursor: pointer; }
+.pmore { margin-top: 6px; }
+.pnote { font-size: 0.78rem; color: var(--muted); line-height: 1.45; margin: 0; max-width: 110ch; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -331,7 +387,9 @@ details.sources li { break-inside: avoid; }
   <figure class="fig">
     <div class="head">
       <h1>India's idle GPUs: a scheme problem, not a demand problem</h1>
+      <div class="tabs" id="ptabs" role="tablist" aria-label="Views"><button id="tabStack" type="button" role="tab" aria-selected="true" aria-controls="paneStack">The stack</button><button id="tabPortal" type="button" role="tab" aria-selected="false" aria-controls="panePortal" tabindex="-1">Compute portal</button></div>
     </div>
+    <div class="tabpane" id="paneStack" role="tabpanel" aria-labelledby="tabStack">
     <div class="layout">
       <div class="stagecol">
         <div class="stage" id="stage" tabindex="0" aria-label="3D model of the two stacks. Use the layer menu or the list view for a text version.">
@@ -378,9 +436,23 @@ details.sources li { break-inside: avoid; }
     </div>
     <details class="sources"><summary>Sources</summary><ol id="srclist"></ol></details>
     <figcaption>IndiaAI side: organisations with a role in the mission's compute pillar, October 2026. Market side: firms building or selling AI in India outside the mission, from company announcements and press reports. The layers are adapted from Vashishth Doshi's <a href="https://vashishthdoshi.github.io/compute-governance-explainer/">Compute Governance Explainer</a>, an independent explainer written to inform the governance section of California's CalCompute framework report under SB 53. It is not an official standard. We add a Model layer, because most users buy models rather than GPU hours, and call its Suppliers layer Chips. The money flows are a sample of published figures, not a full account: where a figure is not public the flow is drawn without an amount or left out, and each flow card says what its number covers. Logos belong to their owners and appear only to identify each organisation; bodies without a distinct logo are shown by initials.</figcaption>
+    </div>
+    <section class="tabpane" id="panePortal" role="tabpanel" aria-labelledby="tabPortal" hidden>
+      <div class="phead"><h2 id="ptitle"></h2><p class="pdeck" id="pdeck"></p><div class="pstats" id="pstats"></div></div>
+      <div class="playout">
+        <div class="pchart" id="pchart"><div class="pcols"><span>Approved for</span><span>Cloud firm paid</span></div><svg id="psvg" role="img" aria-label="Flow chart of compute subsidy from user groups to cloud firms. The details panel lists the same figures."></svg></div>
+        <aside class="panel pdet" id="pdet" aria-live="polite"></aside>
+      </div>
+      <p class="pnote" id="pnote"></p>
+    </section>
   </figure>
 </div>
 
+<script>
+window.__h0 = location.hash;
+window.PORTAL = {"fetched": "2026-11-16T08:40:10.623Z", "url": "https://compute.indiaai.gov.in/endusers", "approvals": 372, "gpus": 25547, "sub": 1208.83, "bill": 1396.81, "groups": [{"id": "nine", "n": "Nine foundation-model builders", "s": "9 model builders", "d": "Firms picked to build India's own AI models. They applied under several portal categories.", "sub": 1057.83, "bill": 1069.19, "apps": 16, "orgs": [["Sarvam AI", 246.72, 1, ["Yotta"]], ["BharatGen", 187.4, 5, ["CMS Computers", "Locuz", "Vensysco", "Yotta"]], ["Gnani.ai", 177.27, 1, ["E2E Networks"]], ["Soket AI", 163.04, 1, ["Yotta"]], ["Zenteiq Aitech", 162.86, 1, ["Ishan Infotech"]], ["Gan AI", 88.02, 1, ["E2E Networks"]], ["Intellihealth", 22.35, 4, ["Jio"]], ["Avataar", 5.85, 1, ["Jio"]], ["Shodh AI", 4.33, 1, ["Neysa"]]], "ind": [0.0, 0]}, {"id": "gov", "n": "Government bodies", "s": "Government", "d": "Ministries, state IT agencies, PSUs and public research bodies (portal category: Govt entities).", "sub": 98.53, "bill": 208.63, "apps": 156, "orgs": [["IITM Bodhan AI Foundation", 24.74, 2, ["Yotta"]], ["Digital India BHASHINI Division", 17.37, 2, ["Yotta"]], ["NIC", 14.72, 3, ["E2E Networks", "Jio", "Tata Comm."]], ["Bhaskaracharya National Institute for Space Applications and Geoinformatics", 5.45, 3, ["E2E Networks", "Yotta"]], ["Karnataka AI Cell Center for eGovernance", 5.33, 13, ["E2E Networks", "Neysa", "NxtGen", "Yotta"]], ["Gujarat Informatics Limited", 4.24, 3, ["Jio", "NxtGen"]], ["Gyan Bharatam", 3.91, 2, ["Cyfuture"]], ["RajCOMP Info Services Limited", 2.04, 4, ["Jio"]], ["Ceitai", 2.0, 1, ["Yotta"]], ["CDAC", 1.56, 1, ["Vensysco"]], ["NDKSP", 1.53, 5, ["E2E Networks", "Jio", "Tata Comm.", "Yotta"]], ["Gujarat Cooperative Milk Marketing Federations Ltd Amul", 1.53, 1, ["Tata Comm."]], ["Ministry of Agriculture and Farmers Welfare", 1.43, 3, ["Jio", "NxtGen"]], ["Indian Cyber Crime Coordination Centre Ministry of Home Affairs", 1.04, 1, ["Locuz"]], ["AnnamAI", 0.79, 1, ["Jio"]], ["DG Systems CBIC DoR", 0.73, 1, ["Yotta"]], ["Foundation for Innovation and Technology TransferFITT IIT Delhi", 0.68, 5, ["E2E Networks", "Neysa"]], ["NTRO", 0.65, 1, ["Jio"]], ["MP State Electronics Development Corporation Ltd", 0.62, 3, ["E2E Networks", "Tata Comm."]], ["Nashik Trimbakeshwar kumbh Mela", 0.57, 1, ["Jio"]], ["ANNAM AI IIT Ropar", 0.57, 1, ["Jio"]], ["IT Department Govt of Assam", 0.55, 2, ["Tata Comm.", "Yotta"]], ["Indian Institute of Technology Jaipur", 0.5, 2, ["Neysa", "Vensysco"]], ["Rajya Sabha", 0.46, 1, ["Yotta"]], ["Andhra Pradesh Police Technical Services", 0.4, 2, ["NxtGen"]], ["NeGD", 0.35, 1, ["Yotta"]], ["Ministry of Statistics and Programme Implementation", 0.34, 4, ["NxtGen", "Yotta"]], ["Ministry of Corporate Affairs", 0.32, 3, ["E2E Networks", "NxtGen"]], ["The National Small Industries Corporation Ltd", 0.28, 2, ["Yotta"]], ["Central Bureau Of Investigation", 0.24, 1, ["Jio"]], ["Department of Financial Services", 0.21, 1, ["Yotta"]], ["Lal Bahadur Shastri National Academy of Administration", 0.18, 1, ["E2E Networks"]], ["Ministry of Development of North Eastern Region", 0.17, 1, ["E2E Networks"]], ["Madhya Pradesh Industrial Development Corporation Govt of Madhya Pradesh", 0.17, 2, ["E2E Networks", "Yotta"]], ["Ministry of Agriculture", 0.17, 1, ["E2E Networks"]], ["Directorate Of Public Grievances", 0.17, 1, ["Yotta"]], ["National Informatics Centre Hq", 0.16, 2, ["E2E Networks", "Tata Comm."]], ["Ministry of Tribal Affairs", 0.15, 2, ["E2E Networks"]], ["DPIT", 0.12, 3, ["Cyfuture", "E2E Networks"]], ["Kerala State IT Mission", 0.12, 2, ["Jio", "Tata Comm."]], ["Regional Capacity Building and Knowledge Institute Jaipur", 0.11, 4, ["Jio"]], ["Ratan tata Innovation Hub", 0.1, 1, ["Tata Comm."]], ["Blue Cloud Softech Solutions Ltd", 0.1, 1, ["Cyfuture"]], ["Department of Digital Technologies and Governace", 0.1, 1, ["Jio"]], ["Prasar Bharati", 0.1, 1, ["Vensysco"]], ["National Company Law Tribunal", 0.09, 1, ["Neysa"]], ["Annam AI", 0.09, 1, ["Yotta"]], ["Punjab InfoTech", 0.08, 1, ["Yotta"]], ["SSB", 0.08, 1, ["Yotta"]], ["Board of Revenue Uttar Pradesh", 0.07, 1, ["E2E Networks"]], ["NIC Mumbai", 0.07, 1, ["NxtGen"]], ["Chhattisgarh Infotech Promotion Society Raipur", 0.06, 1, ["Yotta"]], ["MOSPI", 0.06, 4, ["E2E Networks", "NxtGen"]], ["Centre for Smart Governance", 0.06, 1, ["Cyfuture"]], ["Mahanadi Coalfields Limited", 0.06, 1, ["Jio"]], ["Engineers India Limited", 0.05, 1, ["Tata Comm."]], ["Chhattisgarh InfoTech and BioTech Promotion Society", 0.04, 1, ["Yotta"]], ["ETTSA", 0.04, 1, ["Yotta"]], ["Chhattisgarh InfoTech Promotion Society", 0.04, 1, ["Yotta"]], ["Indian Bureau of Mines", 0.04, 1, ["Tata Comm."]], ["Directorate of Economics and Statistics Planning and Development Department Bihar Patna", 0.04, 1, ["Yotta"]], ["National Aluminium Company Limited", 0.04, 1, ["Cyfuture"]], ["National Minorities Development Finance Corporation", 0.04, 2, ["NxtGen", "Yotta"]], ["Real Time Governance Society", 0.04, 1, ["Neysa"]], ["Department Of Information Technology and Communication Government of Nagaland", 0.03, 1, ["E2E Networks"]], ["High Court Of Gujarat", 0.03, 1, ["Yotta"]], ["Department of Empowerment of Persons with Disabilities", 0.03, 1, ["Yotta"]], ["Odisha Computer Application Centre", 0.03, 1, ["Yotta"]], ["Goa Electronics Limited", 0.03, 2, ["Cyfuture", "E2E Networks"]], ["Department of Water Resources Government of Punjab", 0.02, 1, ["E2E Networks"]], ["Water and Land Management Institut Lucknow", 0.02, 1, ["Yotta"]], ["Comptroller and Auditor General of india CAG", 0.02, 1, ["Yotta"]], ["Center For Excellence In Postal Technology", 0.02, 2, ["Cyfuture", "NxtGen"]], ["Commercial Taxes and Registration Department", 0.02, 2, ["Jio"]], ["ifsca", 0.02, 1, ["Yotta"]], ["IHUB Quantum Technology Foundation", 0.02, 1, ["Yotta"]], ["THDC India Ltd", 0.02, 1, ["Yotta"]], ["Bureau of Indian Standards", 0.02, 1, ["Cyfuture"]], ["MECON Limited", 0.01, 1, ["Yotta"]], ["MSTC Limited", 0.01, 5, ["E2E Networks", "Jio", "NxtGen", "Tata Comm."]], ["Ministry of Panchayati Raj", 0.0, 2, ["Locuz"]], ["POWERGRID Corporation of India LTD", 0.0, 1, ["E2E Networks"]], ["Andhra Pradesh Industrial Development Corporation Limited", 0.0, 1, ["Yotta"]], ["National Informatics Centre", 0.0, 2, ["Locuz", "NxtGen"]], ["Cochin Shipyard Limited", 0.0, 2, ["Cyfuture", "E2E Networks"]], ["AI Cell West Bengal Police", 0.0, 1, ["Yotta"]], ["Airawat Research Foundation", 0.0, 1, ["NxtGen"]], ["Rajasthan Police", 0.0, 1, ["E2E Networks"]]], "ind": [0.0, 0]}, {"id": "start", "n": "Other startups and MSMEs", "s": "Other startups", "d": "Every startup and small firm outside the nine (portal categories: Startups & MSMEs, Early-stage startup).", "sub": 26.82, "bill": 74.54, "apps": 131, "orgs": [["Mapin Infolab Pvt Ltd", 10.87, 2, ["NxtGen", "Yotta"]], ["Eka Care", 2.25, 4, ["E2E Networks", "Vensysco"]], ["5C Network", 1.23, 2, ["Jio", "Yotta"]], ["KiteFishAI", 1.07, 1, ["Neysa"]], ["Shivtel Communications Private Limited", 0.9, 1, ["Jio"]], ["Echelonera Technologies Private Limited", 0.83, 2, ["Jio", "Sify"]], ["AI.YoLearn Private Limited (YoLearn.ai)", 0.55, 1, ["Jio"]], ["Vaia Investment Advisory LLP", 0.4, 1, ["E2E Networks"]], ["Aonia Tech Private Limited", 0.36, 1, ["Yotta"]], ["Zenerative Minds Private Limited", 0.33, 1, ["Yotta"]], ["Mukesh Buildtech Private Limited", 0.24, 1, ["Yotta"]], ["Consint Solutions Private Limited", 0.21, 1, ["Locuz"]], ["Vunet Systems Private Limited", 0.15, 1, ["Tata Comm."]], ["Perpetual Pictures Private Limited", 0.13, 1, ["Cyfuture"]], ["Ynxt360 Core Llp", 0.11, 1, ["Locuz"]], ["Frontiersmind Neural Labs Private Limited", 0.09, 1, ["Tata Comm."]], ["Vima3ya Pvt Ltd", 0.08, 2, ["Neysa", "Yotta"]], ["jAi Labs Private Limited", 0.08, 2, ["NxtGen"]], ["cloudmojo", 0.07, 2, ["E2E Networks"]], ["Parshu Tactical Defence Pvt Ltd", 0.06, 1, ["Neysa"]], ["BeyonData Solutions Private Limited", 0.05, 2, ["Cyfuture", "Yotta"]], ["Fonadalabs pvt ltd", 0.05, 1, ["Jio"]], ["Xlscout Xlpat Private Limited", 0.05, 1, ["Jio"]], ["Chandorkar Technologies OPC Pvt ltd", 0.04, 1, ["NxtGen"]], ["Yosaney Fintech Private Limited", 0.04, 1, ["Neysa"]], ["Laxnar AI Innovations Pvt Ltd", 0.03, 1, ["Jio"]], ["Axiomind AI Private Limited", 0.03, 2, ["Yotta"]], ["Viscr Ai", 0.03, 1, ["Locuz"]], ["CoRover Private Limited", 0.03, 1, ["Yotta"]], ["Mindverse Labs", 0.03, 1, ["Cyfuture"]], ["Fram3 AI Labs Pvt Ltd", 0.03, 1, ["Yotta"]], ["10X Octave Technologies Private Limited", 0.03, 1, ["Yotta"]], ["Proglint Software Solutions Pvt Ltd", 0.02, 2, ["Tata Comm."]], ["Hopeviara Private Limited", 0.02, 1, ["E2E Networks"]], ["Sans Systems Private Limited", 0.02, 1, ["Yotta"]], ["MAYA XR Intelligence Private Limited", 0.02, 1, ["Yotta"]], ["CTM Labs", 0.02, 1, ["Cyfuture"]], ["TensorGo", 0.01, 1, ["Yotta"]], ["Deltaphi Labs Pvt Ltd", 0.01, 1, ["E2E Networks"]], ["Zytra Techsolutions Private Limited", 0.01, 1, ["Jio"]], ["Audacieuse AI Innvations Pvt Ltd", 0.01, 1, ["Yotta"]], ["Aftershoot Pvt Ltd", 0.01, 1, ["E2E Networks"]], ["SAMS Social Talent Connect Pvt Ltd", 0.01, 1, ["E2E Networks"]], ["keenheads", 0.01, 2, ["E2E Networks"]], ["N Tales Ai Pvt Ltd", 0.01, 1, ["Cyfuture"]], ["NYDUX Pvt Ltd", 0.01, 1, ["Yotta"]], ["Chatbucket Private Limited", 0.01, 1, ["Neysa"]], ["Oara Innovation Labs Private Limited", 0.0, 1, ["Neysa"]], ["Kenpath Technologies Private Limited", 0.0, 1, ["Yotta"]], ["Signzy Technologies Private Limited", 0.0, 1, ["Cyfuture"]], ["Endee Labs Pvt Lts", 0.0, 1, ["Cyfuture"]], ["GeMTech PARAS Solutions", 0.0, 1, ["Jio"]], ["Togglr", 0.0, 2, ["E2E Networks"]], ["MapleSage Private Limited", 0.0, 1, ["E2E Networks"]], ["Avrozen Technologies Private Limited", 0.0, 1, ["Yotta"]], ["simhatel", 0.0, 2, ["E2E Networks"]], ["AnayaMED Healthtech Private Limited", 0.0, 2, ["Cyfuture"]], ["frankensteinprotocol", 0.0, 1, ["Yotta"]], ["Kenome brand of Qarbona Solutions Pvt Ltd", 0.0, 1, ["NxtGen"]], ["Vithal Visions Private Limited", 0.0, 1, ["Yotta"]], ["Shreeji AI Consultancy", 0.0, 1, ["E2E Networks"]], ["Rotten Grapes Private Limited", 0.0, 1, ["Neysa"]], ["Creative Clutch Private Limited", 0.0, 1, ["Cyfuture"]], ["Unbreached labs", 0.0, 1, ["Tata Comm."]], ["Egrove Systems Private Limited", 0.0, 2, ["Tata Comm."]], ["Ruzo Green Energy Private Limited", 0.0, 1, ["Cyfuture"]], ["Pragmatiq Systems Pvt Ltd", 0.0, 1, ["Tata Comm."]], ["Kokumi Technologies Private Limited", 0.0, 1, ["Tata Comm."]], ["Sayvatar", 0.0, 1, ["Yotta"]], ["Rumik Intelligence Private Limited", 0.0, 1, ["Neysa"]], ["Dityabytes private limited", 0.0, 1, ["Tata Comm."]], ["Bohni Tech Private Limited", 0.0, 1, ["E2E Networks"]], ["Param Software", 0.0, 1, ["Tata Comm."]], ["Serendipity Labs OPC Private Limited", 0.0, 1, ["Neysa"]], ["Mentorme Foundation", 0.0, 1, ["Yotta"]], ["X Boson Ai", 0.0, 1, ["Yotta"]], ["silicofeller", 0.0, 1, ["NxtGen"]], ["Gokul AI Solutions", 0.0, 1, ["Yotta"]], ["Zilo Infotech Private Limited", 0.0, 1, ["Yotta"]], ["Ispark Datconnect", 0.0, 1, ["Yotta"]], ["thearc", 0.0, 1, ["Tata Comm."]], ["Advayaflow Private Limited", 0.0, 1, ["Tata Comm."]], ["Qbit Labs Private Limited", 0.0, 1, ["E2E Networks"]], ["olacabs", 0.0, 1, ["E2E Networks"]]], "ind": [6.17, 30]}, {"id": "iai", "n": "IndiaAI itself", "s": "IndiaAI itself", "d": "Compute the mission approved for its own use.", "sub": 13.24, "bill": 13.24, "apps": 4, "orgs": [["IndiaAI", 13.24, 4, ["CMS Computers", "NxtGen"]]], "ind": [0.0, 0]}, {"id": "res", "n": "Researchers and academia", "s": "Researchers", "d": "Universities, institutes, individual researchers and fellows (portal categories: Researchers or Academia, Early-stage researchers, IndiaAI Fellowship).", "sub": 12.24, "bill": 30.76, "apps": 45, "orgs": [["IIT Kharagpur", 1.61, 1, ["Tata Comm."]], ["Indian AI Research Organisation", 0.66, 1, ["Yotta"]], ["Indian Institute of Technology Madras", 0.19, 1, ["Yotta"]], ["Indian Institute of Technology Dharwad", 0.02, 1, ["NxtGen"]], ["Plaksha University", 0.01, 1, ["Jio"]], ["CSIR Central Drug Research Institute CDRI", 0.0, 1, ["E2E Networks"]], ["Indian Statistical Institute", 0.0, 1, ["Cyfuture"]], ["Indian Association for the Cultivation of Science", 0.0, 1, ["Tata Comm."]], ["kaliber labs", 0.0, 1, ["Tata Comm."]], ["B V Raju Institute of Technology", 0.0, 2, ["Cyfuture", "Neysa"]], ["Birla Institute Of Technology Science Pilani", 0.0, 1, ["E2E Networks"]], ["Indian Institute Of Information Technology Kottayam", 0.0, 1, ["Yotta"]], ["Not Available", 0.0, 1, ["E2E Networks"]], ["Visvesvaraya National Institute of Technology", 0.0, 1, ["Yotta"]], ["Motilal Nehru National Institute of Technology", 0.0, 1, ["E2E Networks"]], ["Nit Raipur", 0.0, 1, ["Tata Comm."]]], "ind": [9.75, 28]}, {"id": "stu", "n": "Students", "s": "Students", "d": "Portal category: Students.", "sub": 0.17, "bill": 0.44, "apps": 20, "orgs": [["School of Interwoven Arts and Sciences", 0.15, 1, ["Neysa"]], ["National Institute of Open Schooling", 0.0, 1, ["Cyfuture"]], ["Galgotias University", 0.0, 1, ["Yotta"]], ["Kalinga Institute of Industrial Technology", 0.0, 1, ["E2E Networks"]], ["Loyola College", 0.0, 1, ["Yotta"]], ["IIT Bombay", 0.0, 1, ["Tata Comm."]], ["Walchand institute of technology", 0.0, 1, ["Neysa"]], ["Indian Institute of Management Raipur", 0.0, 1, ["Yotta"]], ["Apex Institute of Technology", 0.0, 1, ["Tata Comm."]]], "ind": [0.02, 11]}], "providers": [{"n": "Yotta", "sub": 506.29, "apps": 89}, {"n": "E2E Networks", "sub": 273.45, "apps": 84}, {"n": "Ishan Infotech", "sub": 162.86, "apps": 1}, {"n": "Locuz", "sub": 86.04, "apps": 12}, {"n": "Vensysco", "sub": 74.07, "apps": 5}, {"n": "Jio", "sub": 50.77, "apps": 46}, {"n": "NxtGen", "sub": 14.8, "apps": 38}, {"n": "Tata Comm.", "sub": 12.03, "apps": 30}, {"n": "Neysa", "sub": 7.65, "apps": 30}, {"n": "CMS Computers", "sub": 7.48, "apps": 3}, {"n": "Orient", "sub": 7.23, "apps": 1}, {"n": "Cyfuture", "sub": 5.68, "apps": 32}, {"n": "Sify", "sub": 0.49, "apps": 1}], "links": [["start", "Vensysco", 2.17, 1], ["gov", "Tata Comm.", 10.15, 11], ["start", "Neysa", 1.23, 11], ["start", "Jio", 5.7, 14], ["start", "Tata Comm.", 0.27, 13], ["start", "Yotta", 12.73, 34], ["res", "Tata Comm.", 1.61, 4], ["gov", "Yotta", 52.69, 39], ["res", "Yotta", 1.62, 8], ["start", "E2E Networks", 0.64, 25], ["start", "Cyfuture", 1.46, 18], ["stu", "Neysa", 0.15, 2], ["start", "Locuz", 0.38, 5], ["gov", "Vensysco", 1.95, 3], ["res", "Neysa", 0.57, 5], ["res", "Cyfuture", 0.0, 3], ["gov", "Cyfuture", 4.21, 10], ["gov", "Jio", 16.86, 24], ["gov", "Neysa", 1.38, 11], ["gov", "E2E Networks", 7.12, 32], ["nine", "Jio", 28.2, 5], ["stu", "Yotta", 0.0, 5], ["res", "E2E Networks", 0.4, 19], ["stu", "Tata Comm.", 0.0, 2], ["gov", "Locuz", 1.04, 4], ["stu", "Cyfuture", 0.0, 1], ["res", "Jio", 0.01, 3], ["start", "Sify", 0.49, 1], ["start", "NxtGen", 1.74, 9], ["gov", "NxtGen", 3.13, 22], ["res", "NxtGen", 0.79, 2], ["res", "Orient", 7.23, 1], ["stu", "Locuz", 0.0, 1], ["stu", "E2E Networks", 0.0, 6], ["stu", "NxtGen", 0.02, 3], ["nine", "Ishan Infotech", 162.86, 1], ["iai", "CMS Computers", 4.12, 2], ["iai", "NxtGen", 9.12, 2], ["nine", "Neysa", 4.33, 1], ["nine", "Locuz", 84.61, 2], ["nine", "Yotta", 439.24, 3], ["nine", "E2E Networks", 265.29, 2], ["nine", "CMS Computers", 3.35, 1], ["nine", "Vensysco", 69.95, 1]]};
+
+</script>
 <script>
 window.STACK = {
 LAYERS: ["User", "Model", "Home institution", "Allocation", "Funding", "Governance", "Ownership", "Operations", "Facility", "Chips"],
@@ -1180,7 +1252,7 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
   document.getElementById("sskip").addEventListener("click", exitStory);
   document.getElementById("replay").addEventListener("click", () => enterStory(true));
   document.addEventListener("keydown", e => {
-    if (state.story == null || (e.target.closest && e.target.closest("select, input, textarea"))) return;
+    if (state.story == null || fig.classList.contains("onportal") || (e.target.closest && e.target.closest("select, input, textarea"))) return;
     const step = { ArrowRight: 1, PageDown: 1, ArrowLeft: -1, PageUp: -1 }[e.key];
     if (e.key === "Escape") { e.stopImmediatePropagation(); exitStory(); }
     else if (step) { e.preventDefault(); e.stopImmediatePropagation(); goStep(state.story + step, true); }
@@ -1194,19 +1266,146 @@ LOGOS: {"indiaai": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAA
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) goStep(state.story + (dx < 0 ? 1 : -1), true);
   }, { passive: true });
 
-  window.UI = { peek, showHome, showPlayer, showLayer, setFocus, state, setList, showFlowCard, closeFlow, showLayerMoney, layerTotals, listable, inGroup, cr, KINDS };
+  window.UI = { enterStory, peek, showHome, showPlayer, showLayer, setFocus, state, setList, showFlowCard, closeFlow, showLayerMoney, layerTotals, listable, inGroup, cr, KINDS };
   const h0 = location.hash;
   const start = { pool: ["iai", "off"], market: ["both", "off"], open: ["mkt", "off"], money: ["both", "flows"] }[location.hash.slice(1)];
   if (start) [state.side, state.money] = start;
   showHome();
   if (h0 === "#list") setList(true);
-  else if (!start) enterStory(false);
+  else if (!start && window.__h0 !== "#portal") enterStory(false);
   setTimeout(() => {
     if (!window.Stack3D) {
       document.getElementById("loading").textContent = "The 3D view could not start in this browser, so the list view is shown.";
       setTimeout(() => { setList(true); v3d.disabled = true; }, 1200);
     }
   }, 9000);
+})();
+</script>
+
+<script>
+/* Compute portal tab: every request approved on IndiaAI's compute portal, grouped by who asked (left) and the cloud firm paid (right). */
+(() => {
+  const D = window.PORTAL, UI = window.UI;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const fig = document.querySelector(".fig"), paneS = $("paneStack"), paneP = $("panePortal"), tS = $("tabStack"), tP = $("tabPortal");
+  const svg = $("psvg"), det = $("pdet"), chart = $("pchart");
+  const GC = { nine: "--r-private", gov: "--r-gov", start: "--r-user", res: "--r-partner", iai: "--r-home", stu: "--r-supplier" };
+  const col = id => `var(${GC[id]})`;
+  const loc = (v, d) => v.toLocaleString("en-IN", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const crx = v => `₹${loc(v, 2)} cr`;
+  const crf = v => v >= 100 ? `₹${loc(Math.round(v), 0)} cr` : v >= 10 ? `₹${loc(v, 1)} cr` : v >= 0.01 ? `₹${loc(v, 2)} cr` : "under ₹0.01 cr";
+  const pct = v => { const p = v / D.sub * 100; return p >= 10 ? `${Math.round(p)}%` : p >= 0.1 ? `${loc(p, 1)}%` : "under 0.1%"; };
+  const G = Object.fromEntries(D.groups.map(g => [g.id, g])), PR = Object.fromEntries(D.providers.map(p => [p.n, p]));
+  const day = new Date(D.fetched).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+
+  const nine = G.nine, res = D.groups.filter(g => g.id === "res" || g.id === "stu").reduce((a, g) => a + g.sub, 0);
+  $("ptitle").textContent = `Nine firms got ${Math.round(nine.sub / D.sub * 100)}% of the compute subsidy`;
+  $("pdeck").textContent = `Every request approved on IndiaAI's compute portal, grouped by who asked and which cloud firm runs the GPUs. The wider the band, the more subsidy approved. Researchers and students together got ${crf(res)}.`;
+  $("pstats").innerHTML = [[crx(D.sub), "subsidy approved"], [loc(D.approvals, 0), "approved requests"], [D.providers.length, "cloud firms paid"]]
+    .map(([b, t]) => `<div><b>${b}</b><span>${t}</span></div>`).join("") + `<div class="pdate"><span>IndiaAI Compute Portal, read ${day}</span></div>`;
+  $("pnote").innerHTML = `Source: <a href="${D.url}" target="_blank" rel="noopener">IndiaAI Compute Portal, list of approved end users</a>, read ${day}. Subsidy approved is not money paid: IndiaAI pays its share to the cloud firm after the computing is used, and requests can still lapse. Groups are ours: the nine model builders are counted together under whichever portal category they applied, and so is IndiaAI's own use; every other group follows the portal's categories. Applicants who gave no organisation are counted but not named. The portal's own page script changes six rows before showing them; we use the values it shows. Totals change as approvals are added or withdrawn.`;
+
+  // ---------- the flow chart: user groups (left) to cloud firms (right), band width = subsidy ----------
+  let sel = { g: null, p: null };
+  function draw() {
+    const W = chart.clientWidth; if (!W) return;
+    const narrow = W < 600, LW = narrow ? 104 : 200, BW = narrow ? 8 : 12, SLOT = narrow ? 30 : 34, GAP = 6;
+    const k = (narrow ? 300 : 420) / D.sub;
+    const place = ns => { let y = 0; ns.forEach(n => { n.h = Math.max(n.sub * k, 2); const s = Math.max(n.h, SLOT); n.y = y + (s - n.h) / 2; n.cy = y + s / 2; y += s + GAP; }); return y - GAP; };
+    const L = D.groups.map(g => ({ id: g.id, sub: g.sub })), R = D.providers.map(p => ({ id: p.n, sub: p.sub }));
+    const hL = place(L), hR = place(R), H = Math.max(hL, hR);
+    L.forEach(n => { n.y += (H - hL) / 2; n.cy += (H - hL) / 2; }); R.forEach(n => { n.y += (H - hR) / 2; n.cy += (H - hR) / 2; });
+    const LI = Object.fromEntries(L.map((n, i) => [n.id, i])), RI = Object.fromEntries(R.map((n, i) => [n.id, i]));
+    const x0 = LW + BW, x1 = W - LW - BW, xm = (x0 + x1) / 2;
+    const offL = L.map(n => n.y + (n.h - n.sub * k) / 2), offR = R.map(n => n.y + (n.h - n.sub * k) / 2);
+    const links = D.links.slice().sort((a, b) => LI[a[0]] - LI[b[0]] || RI[a[1]] - RI[b[1]]);
+    const yl = new Map(); links.forEach(l => { const i = LI[l[0]]; yl.set(l, offL[i]); offL[i] += l[2] * k; });
+    links.slice().sort((a, b) => RI[a[1]] - RI[b[1]] || LI[a[0]] - LI[b[0]]).forEach(l => { const i = RI[l[1]]; l.yr = offR[i]; offR[i] += l[2] * k; });
+    const band = l => { const t = Math.max(l[2] * k, 0.8), a = yl.get(l), b = l.yr;
+      return `M${x0},${a}C${xm},${a} ${xm},${b} ${x1},${b}L${x1},${b + t}C${xm},${b + t} ${xm},${a + t} ${x0},${a + t}Z`; };
+    const node = (n, left) => { const g = left ? G[n.id] : null, p = left ? null : PR[n.id], s = Math.max(n.h, SLOT);
+      const tx = left ? LW - 8 : W - LW + 8, anc = left ? "end" : "start", fill = left ? col(n.id) : "var(--z-both)";
+      return `<g class="pnode" ${left ? `data-g="${n.id}"` : `data-p="${esc(n.id)}"`}><rect class="hit" x="${left ? 0 : x1}" y="${n.cy - s / 2}" width="${LW + BW}" height="${s}" fill="transparent"/>`
+        + `<rect x="${left ? LW : x1}" y="${n.y}" width="${BW}" height="${n.h}" rx="2" fill="${fill}"/>`
+        + `<text class="pn" x="${tx}" y="${n.cy - 2}" text-anchor="${anc}">${esc(left ? g.s : n.id)}</text>`
+        + `<text class="pv" x="${tx}" y="${n.cy + 12}" text-anchor="${anc}">${crf(n.sub)}${narrow ? "" : ` · ${pct(n.sub)}`}</text></g>`; };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H + 4}`); svg.setAttribute("height", H + 4);
+    svg.innerHTML = links.map(l => `<path class="pband" data-g="${l[0]}" data-p="${esc(l[1])}" d="${band(l)}" fill="${col(l[0])}"><title>${esc(G[l[0]].s)} → ${esc(l[1])}: ${crf(l[2])}, ${l[3]} request${l[3] > 1 ? "s" : ""}</title></path>`).join("")
+      + L.map(n => node(n, true)).join("") + R.map(n => node(n, false)).join("");
+    mark();
+  }
+  function mark() {
+    svg.classList.toggle("has-sel", !!(sel.g || sel.p));
+    svg.querySelectorAll(".pband").forEach(b => b.classList.toggle("on", b.dataset.g === sel.g || b.dataset.p === sel.p));
+    svg.querySelectorAll(".pnode").forEach(n => n.classList.toggle("on", (n.dataset.g && n.dataset.g === sel.g) || (n.dataset.p && n.dataset.p === sel.p)
+      || (sel.g && n.dataset.p && D.links.some(l => l[0] === sel.g && l[1] === n.dataset.p)) || (sel.p && n.dataset.g && D.links.some(l => l[1] === sel.p && l[0] === n.dataset.g))));
+  }
+  svg.addEventListener("click", e => {
+    const t = e.target.closest(".pnode, .pband"); if (!t) return;
+    pick(t.dataset.g || null, t.classList.contains("pnode") ? t.dataset.p || null : null, true);
+  });
+
+  // ---------- details panel: all groups, one group's firms and organisations, or one cloud firm ----------
+  const row = (key, label, v, max, c, sub) => `<button class="prow" type="button" ${key} style="--rc:${c}"><span><i></i>${esc(label)}</span><b>${crf(v)}</b><em style="width:${Math.max(v / max * 100, 0.6)}%"></em>${sub ? `<small>${sub}</small>` : ""}</button>`;
+  function home() {
+    det.style.removeProperty("--rc");
+    const mx = D.groups[0].sub, mp = D.providers[0].sub;
+    det.innerHTML = `<h2>Who got the subsidy</h2><p class="meta">Select a group or a cloud firm, here or in the chart.</p>
+      <div class="plist">${D.groups.map(g => row(`data-g="${g.id}"`, g.n, g.sub, mx, col(g.id), `${pct(g.sub)} · ${g.apps} requests`)).join("")}</div>
+      <h3>Cloud firms paid</h3><div class="plist">${D.providers.map(p => row(`data-p="${esc(p.n)}"`, p.n, p.sub, mp, "var(--z-both)", `${pct(p.sub)} · ${p.apps} request${p.apps > 1 ? "s" : ""}`)).join("")}</div>`;
+  }
+  function group(g) {
+    det.style.setProperty("--rc", col(g.id));
+    const ls = D.links.filter(l => l[0] === g.id).sort((a, b) => b[2] - a[2]), mx = ls[0][2];
+    const top = g.orgs[0] ? g.orgs[0][1] : 1, many = g.orgs.length > 12;
+    const org = o => `<div class="porg"><span>${esc(o[0])}<small>${o[2]} request${o[2] > 1 ? "s" : ""} · ${esc(o[3].join(", "))}</small></span><b>${crf(o[1])}</b></div>`;
+    det.innerHTML = `<button class="pback" type="button">← All groups</button><h2>${esc(g.n)}</h2>
+      <div class="pamt">${crx(g.sub)}<small>${pct(g.sub)} of the subsidy · ${g.apps} approved request${g.apps > 1 ? "s" : ""}</small></div>
+      <p>${esc(g.d)}</p><p class="meta">Full price of these requests: ${crx(g.bill)}. The subsidy covers ${Math.round(g.sub / g.bill * 100)}%; users pay the rest.</p>
+      <h3>Cloud firms paid</h3><div class="plist">${ls.map(l => row(`data-p="${esc(l[1])}"`, l[1], l[2], mx, col(g.id), `${l[3]} request${l[3] > 1 ? "s" : ""}`)).join("")}</div>
+      <h3>Who, by organisation</h3><div class="porgs">${g.orgs.slice(0, 12).map(org).join("")}${many ? `<div class="pall" hidden>${g.orgs.slice(12).map(org).join("")}</div><button class="pmore" type="button">Show all ${g.orgs.length}</button>` : ""}
+      ${g.ind[1] ? `<div class="porg ind"><span>${g.ind[1]} applicant${g.ind[1] > 1 ? "s" : ""} who gave no organisation<small>counted together, not named</small></span><b>${crf(g.ind[0])}</b></div>` : ""}</div>`;
+    det.querySelector(".pmore")?.addEventListener("click", e => { det.querySelector(".pall").hidden = false; e.target.remove(); });
+  }
+  function provider(p) {
+    det.style.setProperty("--rc", "var(--z-both)");
+    const ls = D.links.filter(l => l[1] === p.n).sort((a, b) => b[2] - a[2]), mx = ls[0][2];
+    det.innerHTML = `<button class="pback" type="button">← All groups</button><h2>${esc(p.n)}</h2>
+      <div class="pamt">${crx(p.sub)}<small>${pct(p.sub)} of the subsidy · ${p.apps} approved request${p.apps > 1 ? "s" : ""}</small></div>
+      <p class="meta">Subsidy approved for computing on this firm's GPUs. IndiaAI pays it to the firm once the computing is used.</p>
+      <h3>For whom</h3><div class="plist">${ls.map(l => row(`data-g="${l[0]}"`, G[l[0]].n, l[2], mx, col(l[0]), `${l[3]} request${l[3] > 1 ? "s" : ""}`)).join("")}</div>`;
+  }
+  function pick(g, p, fromChart) {
+    if ((g && g === sel.g && !p) || (p && p === sel.p && !g)) { g = p = null; }
+    sel = { g, p };
+    if (g) group(G[g]); else if (p) provider(PR[p]); else home();
+    mark();
+    if (fromChart && (g || p) && matchMedia("(max-width: 960px)").matches) det.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  det.addEventListener("click", e => {
+    if (e.target.closest(".pback")) return pick(null, null);
+    const b = e.target.closest(".prow"); if (b) pick(b.dataset.g || null, b.dataset.p || null);
+  });
+
+  // ---------- tabs ----------
+  let storyPending = window.__h0 === "#portal";
+  function setTab(t) {
+    const on = t === "portal";
+    paneS.hidden = on; paneP.hidden = !on; fig.classList.toggle("onportal", on);
+    tS.setAttribute("aria-selected", String(!on)); tP.setAttribute("aria-selected", String(on));
+    tS.tabIndex = on ? -1 : 0; tP.tabIndex = on ? 0 : -1;
+    if (on) { draw(); try { history.replaceState(null, "", "#portal"); } catch (e) {} return; }
+    if (storyPending) { storyPending = false; UI.enterStory(false); }
+    else if (UI.state.story == null) UI.showHome();
+    else try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  }
+  tS.addEventListener("click", () => setTab("stack"));
+  tP.addEventListener("click", () => setTab("portal"));
+  $("ptabs").addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const t = paneP.hidden ? "portal" : "stack"; setTab(t); (t === "portal" ? tP : tS).focus(); } });
+  new ResizeObserver(() => { if (!paneP.hidden) draw(); }).observe(chart);
+  home();
+  if (window.__h0 === "#portal") setTab("portal");
 })();
 </script>
 
